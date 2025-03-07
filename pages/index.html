@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebAPI</title>
+    <style>
+      /* Formatar o documento usando CSS */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url("/src/imgs/1.png");
+      }
+
+      #sidebar {
+        height: 100vh;
+        padding: 20px;
+        background-color: #e1e1e1;
+        float: left;
+        width: 250px;
+      }
+
+      #sidebar h2 {
+        margin-top: 0;
+      }
+
+      #content {
+        padding: 10px;
+        float: left;
+        width: calc(100% - 250px);
+      }
+
+      #titulo {
+        color: #333333;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      #sidebar a {
+        color: #333;
+        display: block;
+        margin-bottom: 10px;
+        text-decoration: none;
+      }
+      #sidebar a:hover {
+        text-decoration: underline;
+      }
+    </style>
+
+    <script>
+      // document.getElementById("cadastro-link").addEventListener("click", function() {
+      //   var cadastroOptions = document.getElementById("cadastro-options");
+      //   if (cadastroOptions.style.display === "none") {
+      //     cadastroOptions.style.display = "block";
+      //   } else {
+      //     cadastroOptions.style.display = "none";
+      //   }
+      // });
+    </script>
+  </head>
+
+  <body>
+    <div id="sidebar">
+      <h2>Web API</h2>
+      <a href="#" id="management-link">Management</a>
+      <ul id="management-options" style="display: block;">
+        <li><a href="/reserva">Request</a></li>
+        <li><a href="/reserva">Request Confirmed</a></li>
+        <li><a href="/atendimento">Service</a></li>
+        <li><a href="/driverdeliver/1">Driver Deliver</a></li>
+        <li><a href="/allocation">Allocation</a></li>
+        <li><a href="/useratendimentoallocation">User Atendimento Allocation</li>
+        <li><a href="/userbankdetails">Employee Financial Details</a></li>
+        <li><a href="/paymentcriteria">Payment Criteria</a></li>
+        <li><a href="/#">Payment</a></li>
+        <li><a href="/#">Maintenance</a></li>
+        <li><a href="/#">Supply</a></li>
+
+      </ul>
+      <a href="#" id="registration-link">Registration</a>
+      <ul id="registration-options" style="display: block;">
+        <li><a href="/veiculo">Vehicle</a></li>
+        <li><a href="/veiculoimg/1/images">Vehicle all images</a></li>
+        <li><a href="/oficina">Workshop</a></li>
+        <li><a href="/posto">Fuel Station</a></li>
+        <li><a href="/Item">Itens</a></li>
+        <li><a href="/AtendimentoItem">Atendimento Itens</a></li>
+        <li><a href="/AtendimentoDocument">Atendimento Document</a></li>
+      </ul>
+
+      <a href="#" id="registration-link">User and Roles</a>
+      <ul id="registration-options" style="display: block;">
+        <li><a href="/user">User</a></li>
+        <li><a href="/role">Role</a></li>
+        <li><a href="/userrole">User associete to Roles</a></li>
+        <li><a href="/userbankdetails/1">User Bank Details</a></li>
+      </ul>
+    </div>
+
+    <div id="titulo">
+      <h2>
+        LN Car Rental Web API
+      </h2>
+    </div>
+
+    <div id="content">
+      <p>
+        @Developed by: Felizardo Chaguala, 2023
+      </p>
+    </div>
+  </body>
+</html>
