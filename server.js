@@ -41,7 +41,7 @@ import atendimentoItemRoutes from './routes/atendimentoItemRoutes.js';
 import atendimentoDocumentRoutes from './routes/atendimentoDocumentRoutes.js';
 import ItensEntregaRoutes from './routes/ItensEntregaRoutes.js';
 import AllocationRoutes from './routes/allocationRoutes.js';
-import VeiculoImgRoutes from './routes/VeiculoImgRoutes.js';
+import VeiculoImgRoutes from './routes/veiculoImgRoutes.js';
 import UserBackDetailsRoutes from './routes/BankDetailsRoutes.js';
 import DriveDeliverRoutes from './routes/DriveDeliverRoutes.js';
 import PaymentCriteriaRoutes from './routes/paymentCriteriaRoutes.js';
