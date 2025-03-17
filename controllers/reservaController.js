@@ -134,15 +134,30 @@ export const getReservaDetailsByNumber = async (req, res) => {
     const reserva = await Reserva.findOne({
       where: { id: id },
       include: [
-        { model: User, as: 'user', attributes: ['firstName'] },
-        { model: Veiculo, as: 'veiculo', attributes: ['matricula'] }
+        { model: User, as: 'user', attributes: ['firstName', 'lastName', 'email'] },
+        { model: Veiculo, as: 'veiculo', attributes: ['matricula', 'marca', 'modelo'] }
       ]
     });
 
     if (reserva) {
       res.status(200).json({
-        userName: reserva.user.firstName,
-        veiculoMatricula: reserva.veiculo.matricula,
+        id: reserva.id,
+        destination: reserva.destination,
+        date: reserva.date,
+        numberOfDays: reserva.numberOfDays,
+        state: reserva.state,
+        user: {
+          id: reserva.user.id,
+          firstName: reserva.user.firstName,
+          lastName: reserva.user.lastName,
+          email: reserva.user.email,
+        },
+        veiculo: {
+          id: reserva.veiculo.id,
+          matricula: reserva.veiculo.matricula,
+          marca: reserva.veiculo.marca,
+          modelo: reserva.veiculo.modelo,
+        }
       });
     } else {
       res.status(404).json({ message: 'Reserva not found' });

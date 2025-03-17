@@ -94,8 +94,13 @@ app.use('/detalhespagamento', DetalhePagamentoRoutes);
 */
 
 // Configurar associações entre modelos
+// Configurar associações entre modelos
 User.belongsToMany(Role, { through: UserRole, foreignKey: 'userId' });
 Role.belongsToMany(User, { through: UserRole, foreignKey: 'roleId' });
+
+// Associações adicionais para UserRole
+UserRole.belongsTo(User, { foreignKey: 'userId' });
+UserRole.belongsTo(Role, { foreignKey: 'roleId' });
 
 // Configurar associações entre modelos Reserva e User
 Reserva.belongsTo(User, { as: 'user', foreignKey: 'userID' });
@@ -136,15 +141,9 @@ Allocation.belongsToMany(Atendimento, {through: UserAtendimentoAllocation, forei
 
 // Definir a associação com o modelo Atendimento
 Atendimento.hasMany(Pagamento, { foreignKey: 'atendimentoId' }); // Um atendimento pode ter muitos pagamentos
-// Pagamento.belongsTo(Atendimento, { foreignKey: 'atendimentoId' }); // Um pagamento pertence a um atendimento
 
 // Definir a associação com o modelo User (Motorista)
 User.hasMany(Pagamento, { foreignKey: 'userId' }); // Um usuário pode ter muitos pagamentos
-// Pagamento.belongsTo(User, { foreignKey: 'userId' }); // Um pagamento pertence a um usuário
-
-// Definir a associação com o modelo PaymentCriteria
-// PaymentCriteria.hasMany(Pagamento, { foreignKey: 'criterioPagamentoId' }); // Um critério de pagamento pode ter muitos pagamentos
-// Pagamento.belongsTo(PaymentCriteria, { foreignKey: 'criterioPagamentoId' }); // Um pagamento pertence a um critério de pagamento
 
 // Definir a associação com o modelo Pagamento
 Pagamento.hasMany(DetalhePagamento, { foreignKey: 'pagamentoId' }); // Um pagamento pode ter muitos detalhes
@@ -163,37 +162,6 @@ Atendimento.belongsToMany(User, {through: UserAtendimentoAllocation,foreignKey: 
 Atendimento.belongsToMany(Allocation, {through: UserAtendimentoAllocation,foreignKey: 'atendimentoId',});
 Allocation.belongsToMany(User, {through: UserAtendimentoAllocation,foreignKey: 'allocationId',});
 Allocation.belongsToMany(Atendimento, {through: UserAtendimentoAllocation,foreignKey: 'allocationId',});
-
-// User.belongsToMany(Atendimento, {
-//   through: UserAtendimentoAllocation,
-//   foreignKey: 'userId',
-// });
-
-// User.belongsToMany(Allocation, {
-//   through: UserAtendimentoAllocation,
-//   foreignKey: 'userId',
-// });
-
-// Atendimento.belongsToMany(User, {
-//   through: UserAtendimentoAllocation,
-//   foreignKey: 'atendimentoId',
-// });
-
-// Atendimento.belongsToMany(Allocation, {
-//   through: UserAtendimentoAllocation,
-//   foreignKey: 'atendimentoId',
-// });
-
-// Allocation.belongsToMany(User, {
-//   through: UserAtendimentoAllocation,
-//   foreignKey: 'allocationId',
-// });
-
-// Allocation.belongsToMany(Atendimento, {
-//   through: UserAtendimentoAllocation,
-//   foreignKey: 'allocationId',
-// });
-
 
 app.use(express.static(path.join(__dirname, 'pages')));
 
