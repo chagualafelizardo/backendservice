@@ -17,7 +17,9 @@ export const getAllDriveDelivers = async (req, res) => {
 // Função para criar um novo registro de DriveDeliver
 export const createDriveDeliver = async (req, res) => {
   try {
-    const { date, atendimentoID, deliver, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude } = req.body;
+    const { date, atendimentoID, deliver, pickupLatitude, 
+      pickupLongitude, dropoffLatitude, dropoffLongitude,
+      locationDescription } = req.body;
     const driveDeliver = await DriveDeliver.create({
       date,
       atendimentoID,
@@ -26,6 +28,7 @@ export const createDriveDeliver = async (req, res) => {
       pickupLongitude,
       dropoffLatitude,
       dropoffLongitude,
+      locationDescription,
     });
     res.status(201).json(driveDeliver);
   } catch (error) {
@@ -54,7 +57,8 @@ export const getDriveDeliverById = async (req, res) => {
 // Função para atualizar um registro de DriveDeliver por ID
 export const updateDriveDeliver = async (req, res) => {
   try {
-    const { date, atendimentoID, deliver, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude } = req.body;
+    const { date, atendimentoID, deliver, pickupLatitude, pickupLongitude, 
+      dropoffLatitude, dropoffLongitude,locationDescription } = req.body;
     const driveDeliver = await DriveDeliver.findByPk(req.params.id);
     if (driveDeliver) {
       await driveDeliver.update({
@@ -65,6 +69,7 @@ export const updateDriveDeliver = async (req, res) => {
         pickupLongitude,
         dropoffLatitude,
         dropoffLongitude,
+        locationDescription,
       });
       res.json(driveDeliver);
     } else {

@@ -12,6 +12,7 @@ import {
   getVeiculoByMatricula,
   getVeiculoByMatriculaM,
   findVeiculosEmManutencao,
+  getVeiculoWithDetails
 } from '../controllers/veiculoController.js';
 
 const router = express.Router();
@@ -28,5 +29,6 @@ router.patch('/:matricula', updateIsAvailableByMatricula);
 router.get('/veiculo/:matricula', getVeiculoByMatricula);
 router.get('/matricula/:matricula', getVeiculoByMatriculaM);
 router.get('/manutencao', findVeiculosEmManutencao);
+router.get('/:id/details', getVeiculoWithDetails);
 
 export default router;

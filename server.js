@@ -26,6 +26,8 @@ import manutencao from './models/Manutencao.js';
 import detalhesmanutencao from './models/DetalhesManutencao.js';
 import Pagamento from './models/Pagamento.js';
 import DetalhePagamento from './models/DetalhePagamento.js';
+import VeiculoDetails from './models/VeiculoDetails.js';
+import PagamentoReserva from './models/PagamentoReserva.js'
 
 // Importar rotas
 import roleRoutes from './routes/roleRoutes.js';
@@ -51,6 +53,8 @@ import ManutencaoRoutes from './routes/ManutencaoRoutes.js';
 import detalhesmanutencaoRoutes from './routes/DetalhesManutencaoRoutes.js';
 import pagamentoRoutes from './routes/pagamentoRoutes.js';
 import DetalhePagamentoRoutes from './routes/DetalhePagamentoRoutes.js';
+import VeiculoDetailsRoutes from './routes/VeiculoDetailsRoutes.js';
+import PagamentoReservaRoutes from './routes/PagamentoReservaRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -88,12 +92,13 @@ app.use('/manutencao', ManutencaoRoutes);
 app.use('/detalhesmanutencao', detalhesmanutencaoRoutes);
 app.use('/pagamento', pagamentoRoutes);
 app.use('/detalhespagamento', DetalhePagamentoRoutes);
+app.use('/veiculodetails', VeiculoDetailsRoutes);
+app.use('/pagamentoreserva', PagamentoReservaRoutes)
 
 /*
   Criando associacoes no meu modelo de base de dados
 */
 
-// Configurar associações entre modelos
 // Configurar associações entre modelos
 User.belongsToMany(Role, { through: UserRole, foreignKey: 'userId' });
 Role.belongsToMany(User, { through: UserRole, foreignKey: 'roleId' });
@@ -162,6 +167,15 @@ Atendimento.belongsToMany(User, {through: UserAtendimentoAllocation,foreignKey: 
 Atendimento.belongsToMany(Allocation, {through: UserAtendimentoAllocation,foreignKey: 'atendimentoId',});
 Allocation.belongsToMany(User, {through: UserAtendimentoAllocation,foreignKey: 'allocationId',});
 Allocation.belongsToMany(Atendimento, {through: UserAtendimentoAllocation,foreignKey: 'allocationId',});
+
+// Relacionamento entre Veiculo e VeiculoDetails
+Veiculo.hasMany(VeiculoDetails, {foreignKey: 'veiculoId',onDelete: 'CASCADE', as: 'details',});
+VeiculoDetails.belongsTo(Veiculo, {foreignKey: 'veiculoId',});
+
+// Relacionamentos
+PagamentoReserva.belongsTo(User, { foreignKey: 'userId' }); // Um pagamento pertence a um usuário
+PagamentoReserva.belongsTo(Reserva, { foreignKey: 'reservaId' }); // Um pagamento pertence a um atendimento
+
 
 app.use(express.static(path.join(__dirname, 'pages')));
 

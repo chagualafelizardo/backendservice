@@ -26,6 +26,10 @@ const DriveDeliver = sequelize.define('driverdeliver', {
     type: DataTypes.FLOAT,
     allowNull: true, // Campo opcional
   },
+  locationDescription: {
+    type: DataTypes.STRING(255),
+    allowNull: true, // Campo opcional
+  },
 }, {
   timestamps: true,
 });

@@ -84,16 +84,3 @@ export const deleteAllocation = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete allocation' });
   }
 };
-
-// Função para buscar alocações por motorista (opcional)
-// export const getAllocationsByDriver = async (req, res) => {
-//   try {
-//     const { driverId } = req.params;
-//     const allocations = await Allocation.findAll({ where: { driverId } });
-
-//     res.json(allocations);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to fetch allocations for driver' });
-//   }
-// };
