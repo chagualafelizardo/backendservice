@@ -1,5 +1,6 @@
 import Veiculo from '../models/Veiculo.js';
 import Manutencao from '../models/Manutencao.js'; // Importe o modelo Manutencao
+import VeiculoDetails from '../models/VeiculoDetails.js'; // Importa o modelo VeiculoDetails
 
 // Função para buscar todos os veículos
 export const findAll = async (req, res) => {
@@ -335,5 +336,28 @@ export const findVeiculosEmManutencao = async (req, res) => {
   } catch (error) {
     console.error('Erro ao buscar veículos na tabela de manutenção:', error);
     res.status(500).json({ error: 'Failed to fetch vehicles in maintenance table' });
+  }
+};
+
+// Função para buscar um veículo por ID com seus detalhes
+export const getVeiculoWithDetails = async (req, res) => {
+  try {
+    const veiculo = await Veiculo.findByPk(req.params.id, {
+      include: [
+        {
+          model: VeiculoDetails, // Inclui os detalhes do veículo
+          as: 'details', // Alias da associação (deve corresponder à associação definida no modelo)
+        },
+      ],
+    });
+
+    if (veiculo) {
+      res.json(veiculo);
+    } else {
+      res.status(404).json({ error: 'Veiculo not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching veiculo with details:', error);
+    res.status(500).json({ error: 'Failed to fetch veiculo with details' });
   }
 };
