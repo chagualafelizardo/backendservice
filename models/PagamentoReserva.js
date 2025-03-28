@@ -22,6 +22,11 @@ const PagamentoReserva = db.define("PagamentoReserva", {
     allowNull: false,
     defaultValue: Sequelize.NOW, // Define a data atual como valor padrão
   },
+  obs: {
+    type: DataTypes.STRING(800), // Campo para armazenar a data do pagamento
+    allowNull: false,
+    defaultValue: Sequelize.NOW, // Define a data atual como valor padrão
+  },
   // Chave estrangeira para User (Motorista)
   userId: {
     type: DataTypes.INTEGER,

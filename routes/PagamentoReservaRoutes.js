@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   createPagamentoReserva,
-  listPagamentoReservas,
+  AllPagamentoReservas,
   getPagamentoReservaById,
   updatePagamentoReserva,
   deletePagamentoReserva,
@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.post('/', createPagamentoReserva);
-router.get('/', listPagamentoReservas);
+router.get('/', AllPagamentoReservas);
 router.get('/:id', getPagamentoReservaById);
 router.put('/:id', updatePagamentoReserva);
 router.delete('/:id', deletePagamentoReserva);
