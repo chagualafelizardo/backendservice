@@ -30,7 +30,7 @@ export const createPagamentoReserva = async (req, res) => {
 };
 
 // Listar todos os pagamentos de reserva
-export const listPagamentoReservas = async (req, res) => {
+export const AllPagamentoReservas = async (req, res) => {
   try {
     const pagamentoReservas = await PagamentoReserva.findAll({
       include: [
