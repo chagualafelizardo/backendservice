@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 
-const commitMessage = `Auto-commit: ${new Date().toISOString()}`;
+const commitMessage = `Auto-commit: felizardo.chaguala@gmail.com ${new Date().toISOString()}`;
 
 exec("git add .", (error, stdout, stderr) => {
   if (error) {
