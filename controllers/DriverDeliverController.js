@@ -1,11 +1,11 @@
 import DriveDeliver from '../models/DriverDeliver.js';
-import Atendimento from '../models/Atendimento.js';
+import Reserva from '../models/Reserva.js'; // Substituindo Atendimento por Reserva
 
 // Função para buscar todos os registros de DriveDeliver
 export const getAllDriveDelivers = async (req, res) => {
   try {
     const driveDelivers = await DriveDeliver.findAll({
-      include: Atendimento, // Inclui o modelo Atendimento nos resultados
+      include: Reserva, // Inclui o modelo Reserva nos resultados
     });
     res.json(driveDelivers);
   } catch (error) {
@@ -17,19 +17,28 @@ export const getAllDriveDelivers = async (req, res) => {
 // Função para criar um novo registro de DriveDeliver
 export const createDriveDeliver = async (req, res) => {
   try {
-    const { date, atendimentoID, deliver, pickupLatitude, 
-      pickupLongitude, dropoffLatitude, dropoffLongitude,
-      locationDescription } = req.body;
-    const driveDeliver = await DriveDeliver.create({
+    const {
       date,
-      atendimentoID,
       deliver,
       pickupLatitude,
       pickupLongitude,
       dropoffLatitude,
       dropoffLongitude,
       locationDescription,
+      reservaId // novo campo relacionado à reserva
+    } = req.body;
+
+    const driveDeliver = await DriveDeliver.create({
+      date,
+      deliver,
+      pickupLatitude,
+      pickupLongitude,
+      dropoffLatitude,
+      dropoffLongitude,
+      locationDescription,
+      reservaId
     });
+
     res.status(201).json(driveDeliver);
   } catch (error) {
     console.error(error);
@@ -41,7 +50,7 @@ export const createDriveDeliver = async (req, res) => {
 export const getDriveDeliverById = async (req, res) => {
   try {
     const driveDeliver = await DriveDeliver.findByPk(req.params.id, {
-      include: Atendimento, // Inclui o modelo Atendimento nos resultados
+      include: Reserva, // Inclui o modelo Reserva nos resultados
     });
     if (driveDeliver) {
       res.json(driveDeliver);
@@ -57,19 +66,28 @@ export const getDriveDeliverById = async (req, res) => {
 // Função para atualizar um registro de DriveDeliver por ID
 export const updateDriveDeliver = async (req, res) => {
   try {
-    const { date, atendimentoID, deliver, pickupLatitude, pickupLongitude, 
-      dropoffLatitude, dropoffLongitude,locationDescription } = req.body;
+    const {
+      date,
+      deliver,
+      pickupLatitude,
+      pickupLongitude,
+      dropoffLatitude,
+      dropoffLongitude,
+      locationDescription,
+      reservaId
+    } = req.body;
+
     const driveDeliver = await DriveDeliver.findByPk(req.params.id);
     if (driveDeliver) {
       await driveDeliver.update({
         date,
-        atendimentoID,
         deliver,
         pickupLatitude,
         pickupLongitude,
         dropoffLatitude,
         dropoffLongitude,
         locationDescription,
+        reservaId
       });
       res.json(driveDeliver);
     } else {

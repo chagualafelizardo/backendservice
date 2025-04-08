@@ -30,6 +30,10 @@ const DriveDeliver = sequelize.define('driverdeliver', {
     type: DataTypes.STRING(255),
     allowNull: true, // Campo opcional
   },
+  reservaId: { // Mantenha o mesmo nome em todos os lugares
+    type: DataTypes.INTEGER,
+    allowNull: false // Ou true, dependendo dos requisitos
+  }
 }, {
   timestamps: true,
 });

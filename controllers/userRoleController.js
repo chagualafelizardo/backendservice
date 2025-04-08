@@ -188,3 +188,47 @@ export const getAllClients = async (req, res) => {
   }
 };
 
+export const getAllMotorista = async (req, res) => {
+  try {
+    const drivers = await User.findAll({
+      include: [
+        {
+          model: Role,
+          through: { attributes: [] },
+          attributes: ['id', 'name'],
+          where: { name: 'Motorista' }, // Filtra apenas usuários com a role 'DRIVER'
+        },
+      ],
+    });
+
+    if (!drivers.length) {
+      return res.status(404).json({ error: 'No drivers found' });
+    }
+
+    // Mapeia os usuários para incluir suas roles
+    const response = drivers.map(user => ({
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      gender: user.gender,
+      birthdate: user.birthdate,
+      email: user.email,
+      address: user.address,
+      neighborhood: user.neighborhood,
+      phone1: user.phone1,
+      phone2: user.phone2,
+      password: user.password,
+      state: user.state,
+      img: user.img,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      roles: user.roles,
+    }));
+
+    res.json(response);
+  } catch (error) {
+    console.error('Erro ao buscar motoristas:', error);
+    res.status(500).json({ error: 'Failed to fetch drivers' });
+  }
+};

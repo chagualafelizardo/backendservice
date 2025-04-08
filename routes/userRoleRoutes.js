@@ -5,7 +5,8 @@ import {
     getUsersByRoleId,
     getAllUsersWithRoles,
     getAllDrivers,
-    getAllClients
+    getAllClients,
+    getAllMotorista
 } from '../controllers/userRoleController.js';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get('/role/:roleId', getUsersByRoleId);
 router.get('/user', getAllUsersWithRoles);
 router.get('/drivers', getAllDrivers);
 router.get('/clients', getAllClients);
+router.get('/motorista', getAllMotorista);
 
 export default router;

@@ -1,10 +1,11 @@
 import PagamentoReserva from '../models/PagamentoReserva.js';
 import User from '../models/User.js';
 import Reserva from '../models/Reserva.js';
+import fetch from 'node-fetch'; // certifique-se de que esse import está no topo do arquivo
 
 // Criar um novo pagamento de reserva
 export const createPagamentoReserva = async (req, res) => {
-  const { valorTotal, userId, reservaId } = req.body;
+  const { valorTotal, userId, reservaId,obs } = req.body;
 
   try {
     // Verificar se o usuário e a reserva existem
@@ -20,6 +21,7 @@ export const createPagamentoReserva = async (req, res) => {
       valorTotal,
       userId,
       reservaId,
+      obs,
     });
 
     res.status(201).json(pagamentoReserva);
@@ -72,7 +74,7 @@ export const getPagamentoReservaById = async (req, res) => {
 // Atualizar um pagamento de reserva
 export const updatePagamentoReserva = async (req, res) => {
   const { id } = req.params;
-  const { valorTotal, userId, reservaId } = req.body;
+  const { valorTotal, userId, reservaId,obs } = req.body;
 
   try {
     const pagamentoReserva = await PagamentoReserva.findByPk(id);
@@ -94,6 +96,7 @@ export const updatePagamentoReserva = async (req, res) => {
       valorTotal,
       userId,
       reservaId,
+      obs,
     });
 
     res.status(200).json(pagamentoReserva);
@@ -119,5 +122,36 @@ export const deletePagamentoReserva = async (req, res) => {
   } catch (error) {
     console.error('Erro ao excluir pagamento de reserva:', error);
     res.status(500).json({ message: 'Erro ao excluir pagamento de reserva.' });
+  }
+};
+
+export const buscarLocalizacao = async (req, res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ message: 'Parâmetro de busca "query" é obrigatório.' });
+  }
+
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${apiKey}&language=pt&region=mz`;
+
+  try {
+    const response = await fetch(url);
+
+    // Verifica se a resposta foi bem-sucedida
+    if (!response.ok) {
+      return res.status(500).json({ message: 'Erro ao acessar o Google Places API.' });
+    }
+
+    const data = await response.json();
+
+    if (data.status !== 'OK') {
+      return res.status(500).json({ message: `Erro do Google Places: ${data.status}` });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Erro ao buscar localização:', error);
+    res.status(500).json({ message: 'Erro ao buscar localização no Google Places.' });
   }
 };

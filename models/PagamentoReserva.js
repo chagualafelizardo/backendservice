@@ -10,22 +10,21 @@ const PagamentoReserva = db.define("PagamentoReserva", {
     autoIncrement: true,
   },
   valorTotal: {
-    type: DataTypes.DECIMAL(10, 2), // Valor total com 2 casas decimais
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
     validate: {
-      isDecimal: true, // Garante que o valor seja um número decimal
-      min: 0, // Garante que o valor não seja negativo
+      isDecimal: true, 
+      min: 0,
     },
   },
   data: {
-    type: DataTypes.DATE, // Campo para armazenar a data do pagamento
+    type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW, // Define a data atual como valor padrão
+    defaultValue: Sequelize.NOW,
   },
   obs: {
-    type: DataTypes.STRING(800), // Campo para armazenar a data do pagamento
-    allowNull: false,
-    defaultValue: Sequelize.NOW, // Define a data atual como valor padrão
+    type: DataTypes.STRING(800),
+    allowNull: true,
   },
   // Chave estrangeira para User (Motorista)
   userId: {
