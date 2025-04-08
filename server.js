@@ -4,6 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
 // Importar modelos
 import User from './models/User.js';
@@ -56,8 +57,10 @@ import DetalhePagamentoRoutes from './routes/DetalhePagamentoRoutes.js';
 import VeiculoDetailsRoutes from './routes/VeiculoDetailsRoutes.js';
 import PagamentoReservaRoutes from './routes/PagamentoReservaRoutes.js'
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+dotenv.config(); // <- Carrega as variáveis de ambiente do arquivo .env
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -68,6 +71,14 @@ app.use(cors());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Permitir todas as origens
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
+app.options('*', cors());
 app.use(bodyParser.json());
 app.use('/role', roleRoutes);
 app.use('/user', userRoutes);
@@ -121,8 +132,12 @@ User.hasMany(BankDetails, { foreignKey: 'userId' });
 BankDetails.belongsTo(User, { foreignKey: 'userId' });
 
 // Configurar as associações entre o atendimento e maps de driverdeliver
-Atendimento.hasMany(DriveDeliver, { foreignKey: 'atendimentoId' });
-DriveDeliver.belongsTo(Atendimento, { foreignKey: 'atendimentoId' });
+// Atendimento.hasMany(DriveDeliver, { foreignKey: 'atendimentoId' });
+// DriveDeliver.belongsTo(Atendimento, { foreignKey: 'atendimentoId' });
+
+// Configurar as associações entre o atendimento e maps de driverdeliver
+Reserva.hasMany(DriveDeliver, { foreignKey: 'reservaId' });
+DriveDeliver.belongsTo(Reserva, { foreignKey: 'reservaId' });
 
 // ** Definir as associações entre os modelos User, Atendimento e Alocacao **
 User.belongsToMany(Atendimento, { through: UserAtendimentoAllocation, foreignKey: 'userId' });
