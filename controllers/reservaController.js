@@ -4,7 +4,7 @@ import Veiculo from '../models/Veiculo.js';
 
 // Criar uma nova reserva
 export const createReserva = async (req, res) => {
-  const { date, destination, number_of_days, userID, clientID, veiculoID, state } = req.body;
+  const { date, destination, number_of_days, userID, clientID, veiculoID, state, inService } = req.body;
   try {
     const newReserva = await Reserva.create({
       date,
@@ -14,6 +14,7 @@ export const createReserva = async (req, res) => {
       clientID,
       veiculoID,
       state,
+      inService, // Novo campo incluído
     });
     res.status(201).json(newReserva);
   } catch (error) {
@@ -59,7 +60,7 @@ export const getReservaById = async (req, res) => {
 // Atualizar uma reserva pelo ID
 export const updateReserva = async (req, res) => {
   const { id } = req.params;
-  const { date, destination, number_of_days, userID, clientID, veiculoID, state } = req.body;
+  const { date, destination, number_of_days, userID, clientID, veiculoID, state, inService } = req.body;
   try {
     const reserva = await Reserva.findByPk(id);
     if (reserva) {
@@ -70,6 +71,7 @@ export const updateReserva = async (req, res) => {
       reserva.clientID = clientID;
       reserva.veiculoID = veiculoID;
       reserva.state = state;
+      reserva.inService = inService; // Atualiza o novo campo
       await reserva.save();
 
       console.log('ID:', id);
@@ -83,11 +85,10 @@ export const updateReserva = async (req, res) => {
   }
 };
 
-
-// Função de atualização da reserva
+// Atualizar apenas o estado da reserva
 export const updateReservaState = async (req, res) => {
   const { id } = req.params;
-  const { state } = req.body;  // Somente atualizando o estado
+  const { state } = req.body;
   
   console.log(`Received PUT request for reserva ID: ${id} with state: ${state}`);
 
@@ -95,7 +96,6 @@ export const updateReservaState = async (req, res) => {
     const reserva = await Reserva.findByPk(id);
     
     if (reserva) {
-      // Atualiza apenas o campo de estado
       reserva.state = state;
       await reserva.save();
 
@@ -111,7 +111,7 @@ export const updateReservaState = async (req, res) => {
   }
 };
 
-// Deletar uma reserva pelo ID
+// Deletar uma reserva
 export const deleteReserva = async (req, res) => {
   const { id } = req.params;
   try {
@@ -125,9 +125,9 @@ export const deleteReserva = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
-// Obter detalhes da reserva pelo número da reserva
+// Obter detalhes da reserva pelo número
 export const getReservaDetailsByNumber = async (req, res) => {
   const { id } = req.params;
   try {
@@ -146,6 +146,7 @@ export const getReservaDetailsByNumber = async (req, res) => {
         date: reserva.date,
         numberOfDays: reserva.numberOfDays,
         state: reserva.state,
+        inService: reserva.inService, // Exibir o novo campo
         user: {
           id: reserva.user.id,
           firstName: reserva.user.firstName,
@@ -163,6 +164,32 @@ export const getReservaDetailsByNumber = async (req, res) => {
       res.status(404).json({ message: 'Reserva not found' });
     }
   } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Atualizar apenas o campo inService da reserva
+export const updateReservaInService = async (req, res) => {
+  const { id } = req.params;
+  const { inService } = req.body;
+
+  console.log(`Received PUT request for reserva ID: ${id} with inService: ${inService}`);
+
+  try {
+    const reserva = await Reserva.findByPk(id);
+
+    if (reserva) {
+      reserva.inService = inService;
+      await reserva.save();
+
+      console.log(`Reserva ID ${id} updated to inService: ${inService}`);
+      res.status(200).json({ message: 'Reserva inService flag updated successfully', reserva });
+    } else {
+      console.log(`Reserva ID ${id} not found`);
+      res.status(404).json({ message: 'Reserva not found' });
+    }
+  } catch (error) {
+    console.error(`Error updating inService for reserva ID ${id}: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };

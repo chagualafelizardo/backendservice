@@ -361,3 +361,28 @@ export const getVeiculoWithDetails = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch veiculo with details' });
   }
 };
+
+// Função para buscar veículos pelo estado (FREE ou OCCUPIED)
+export const findAllByState = async (req, res) => {
+  try {
+    const { state } = req.params;
+
+    const veiculos = await Veiculo.findAll({
+      where: { state } // Filtra com base na tag state: 'FREE' ou 'OCCUPIED'
+    });
+
+    // Convertendo imagens para Base64 antes de enviar
+    const response = veiculos.map(veiculo => {
+      const imageBase64 = veiculo.image ? veiculo.image.toString('base64') : null;
+      return {
+        ...veiculo.toJSON(),
+        imagemBase64: imageBase64
+      };
+    });
+
+    res.json(response);
+  } catch (error) {
+    console.error("Erro ao buscar veículos por estado:", error);
+    res.status(500).send("Erro ao buscar veículos por estado");
+  }
+};

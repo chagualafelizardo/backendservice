@@ -6,7 +6,8 @@ import {
   updateReserva,
   updateReservaState,
   deleteReserva,
-  getReservaDetailsByNumber, // Importar a nova função
+  getReservaDetailsByNumber, 
+  updateReservaInService,
 } from '../controllers/reservaController.js';
 
 const router = express.Router();
@@ -18,5 +19,6 @@ router.put('/reserva/:id', updateReserva);
 router.put('/state/:id', updateReservaState);
 router.delete('/:id', deleteReserva);
 router.get('/details/:id', getReservaDetailsByNumber); // Nova rota para obter detalhes da reserva
+router.put('/:id/inservice', updateReservaInService);
 
 export default router;

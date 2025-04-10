@@ -1,4 +1,7 @@
 import express from 'express';
+import emailRoutes from './routes/emailRoutes.js';
+import smsRoutes from './routes/smsRoutes.js';
+
 import sequelize from './config/database.js';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -79,6 +82,9 @@ app.use((req, res, next) => {
 });
 
 app.options('*', cors());
+
+app.use(express.json());
+
 app.use(bodyParser.json());
 app.use('/role', roleRoutes);
 app.use('/user', userRoutes);
@@ -105,6 +111,8 @@ app.use('/pagamento', pagamentoRoutes);
 app.use('/detalhespagamento', DetalhePagamentoRoutes);
 app.use('/veiculodetails', VeiculoDetailsRoutes);
 app.use('/pagamentoreserva', PagamentoReservaRoutes)
+app.use('/email', emailRoutes);
+app.use('/sms', smsRoutes);
 
 /*
   Criando associacoes no meu modelo de base de dados

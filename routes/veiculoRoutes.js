@@ -12,7 +12,8 @@ import {
   getVeiculoByMatricula,
   getVeiculoByMatriculaM,
   findVeiculosEmManutencao,
-  getVeiculoWithDetails
+  getVeiculoWithDetails,
+  findAllByState
 } from '../controllers/veiculoController.js';
 
 const router = express.Router();
@@ -30,5 +31,6 @@ router.get('/veiculo/:matricula', getVeiculoByMatricula);
 router.get('/matricula/:matricula', getVeiculoByMatriculaM);
 router.get('/manutencao', findVeiculosEmManutencao);
 router.get('/:id/details', getVeiculoWithDetails);
+router.get('/state/:state', findAllByState);
 
 export default router;

@@ -32,11 +32,15 @@ const Reserva = sequelize.define('reserva', {
     allowNull: false,
   },
   state: {
-      type: DataTypes.ENUM('Not Confirmed', 'Confirmed'),
-      defaultValue: 'Not Confirmed',
-    },
-  }, {
-    timestamps: true,
+    type: DataTypes.ENUM('Not Confirmed', 'Confirmed'),
+    defaultValue: 'Not Confirmed',
+  },
+  inService: {
+    type: DataTypes.ENUM('Yes', 'No'),
+    defaultValue: 'No',
+  },
+}, {
+  timestamps: true,
 });
 
 export default Reserva;
