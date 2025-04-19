@@ -32,6 +32,7 @@ import Pagamento from './models/Pagamento.js';
 import DetalhePagamento from './models/DetalhePagamento.js';
 import VeiculoDetails from './models/VeiculoDetails.js';
 import PagamentoReserva from './models/PagamentoReserva.js'
+import VehicleHistoryRent from './models/VehicleHistoryRent.js'
 
 // Importar rotas
 import roleRoutes from './routes/roleRoutes.js';
@@ -59,7 +60,7 @@ import pagamentoRoutes from './routes/pagamentoRoutes.js';
 import DetalhePagamentoRoutes from './routes/DetalhePagamentoRoutes.js';
 import VeiculoDetailsRoutes from './routes/VeiculoDetailsRoutes.js';
 import PagamentoReservaRoutes from './routes/PagamentoReservaRoutes.js'
-
+import VehicleHistoryRentRoutes from './routes/VehicleHistoryRentRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -111,6 +112,10 @@ app.use('/pagamento', pagamentoRoutes);
 app.use('/detalhespagamento', DetalhePagamentoRoutes);
 app.use('/veiculodetails', VeiculoDetailsRoutes);
 app.use('/pagamentoreserva', PagamentoReservaRoutes)
+app.use('/vehiclehistoryrent', VehicleHistoryRentRoutes)
+
+
+// Acesso a outras APi externas
 app.use('/email', emailRoutes);
 app.use('/sms', smsRoutes);
 
@@ -199,6 +204,9 @@ VeiculoDetails.belongsTo(Veiculo, {foreignKey: 'veiculoId',});
 PagamentoReserva.belongsTo(User, { foreignKey: 'userId' }); // Um pagamento pertence a um usuário
 PagamentoReserva.belongsTo(Reserva, { foreignKey: 'reservaId' }); // Um pagamento pertence a um atendimento
 
+// Relação com o modelo Veiculo
+Veiculo.hasMany(VehicleHistoryRent, { foreignKey: 'veiculoID' });
+VehicleHistoryRent.belongsTo(Veiculo, { foreignKey: 'veiculoID' });
 
 app.use(express.static(path.join(__dirname, 'pages')));
 

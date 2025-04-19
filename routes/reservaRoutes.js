@@ -8,6 +8,9 @@ import {
   deleteReserva,
   getReservaDetailsByNumber, 
   updateReservaInService,
+  updateReservaIsPaid,
+  getPaidReservas,
+  getUnpaidReservas,
 } from '../controllers/reservaController.js';
 
 const router = express.Router();
@@ -20,5 +23,8 @@ router.put('/state/:id', updateReservaState);
 router.delete('/:id', deleteReserva);
 router.get('/details/:id', getReservaDetailsByNumber); // Nova rota para obter detalhes da reserva
 router.put('/:id/inservice', updateReservaInService);
+router.put('/:id/isPaid', updateReservaIsPaid);
+router.get('/reservas/paid', getPaidReservas);
+router.get('/reservas/notpaid', getUnpaidReservas);
 
 export default router;

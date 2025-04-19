@@ -4,7 +4,7 @@ import Veiculo from '../models/Veiculo.js';
 
 // Criar uma nova reserva
 export const createReserva = async (req, res) => {
-  const { date, destination, number_of_days, userID, clientID, veiculoID, state, inService } = req.body;
+  const { date, destination, number_of_days, userID, clientID, veiculoID, state, inService, isPaid } = req.body;
   try {
     const newReserva = await Reserva.create({
       date,
@@ -14,7 +14,8 @@ export const createReserva = async (req, res) => {
       clientID,
       veiculoID,
       state,
-      inService, // Novo campo incluído
+      inService,
+      isPaid,
     });
     res.status(201).json(newReserva);
   } catch (error) {
@@ -60,7 +61,7 @@ export const getReservaById = async (req, res) => {
 // Atualizar uma reserva pelo ID
 export const updateReserva = async (req, res) => {
   const { id } = req.params;
-  const { date, destination, number_of_days, userID, clientID, veiculoID, state, inService } = req.body;
+  const { date, destination, number_of_days, userID, clientID, veiculoID, state, inService, isPaid } = req.body;
   try {
     const reserva = await Reserva.findByPk(id);
     if (reserva) {
@@ -71,7 +72,9 @@ export const updateReserva = async (req, res) => {
       reserva.clientID = clientID;
       reserva.veiculoID = veiculoID;
       reserva.state = state;
-      reserva.inService = inService; // Atualiza o novo campo
+      reserva.inService = inService;
+      reserva.isPaid = isPaid;
+
       await reserva.save();
 
       console.log('ID:', id);
@@ -146,7 +149,8 @@ export const getReservaDetailsByNumber = async (req, res) => {
         date: reserva.date,
         numberOfDays: reserva.numberOfDays,
         state: reserva.state,
-        inService: reserva.inService, // Exibir o novo campo
+        inService: reserva.inService,
+        isPaid: reserva.isPaid,
         user: {
           id: reserva.user.id,
           firstName: reserva.user.firstName,
@@ -190,6 +194,66 @@ export const updateReservaInService = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error updating inService for reserva ID ${id}: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Atualizar apenas o campo isPaid da reserva
+export const updateReservaIsPaid = async (req, res) => {
+  const { id } = req.params;
+  const { isPaid } = req.body;
+
+  console.log(`Received PUT request for reserva ID: ${id} with isPaid: ${isPaid}`);
+
+  try {
+    const reserva = await Reserva.findByPk(id);
+
+    if (reserva) {
+      reserva.isPaid = isPaid;
+      await reserva.save();
+
+      console.log(`Reserva ID ${id} updated to isPaid: ${isPaid}`);
+      res.status(200).json({ message: 'Reserva isPaid flag updated successfully', reserva });
+    } else {
+      console.log(`Reserva ID ${id} not found`);
+      res.status(404).json({ message: 'Reserva not found' });
+    }
+  } catch (error) {
+    console.error(`Error updating isPaid for reserva ID ${id}: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Obter apenas reservas pagas
+export const getPaidReservas = async (req, res) => {
+  try {
+    const reservas = await Reserva.findAll({
+      where: { isPaid: 'Paid' },
+      include: [
+        { model: User,   as: 'user',    attributes: ['firstName', 'lastName', 'email'] },
+        { model: Veiculo, as: 'veiculo', attributes: ['matricula', 'marca', 'modelo'] }
+      ]
+    });
+    res.status(200).json(reservas);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Obter apenas reservas não pagas
+export const getUnpaidReservas = async (req, res) => {
+  try {
+    const reservas = await Reserva.findAll({
+      where: { isPaid: 'Not Paid' },
+      include: [
+        { model: User,   as: 'user',    attributes: ['firstName', 'lastName', 'email'] },
+        { model: Veiculo, as: 'veiculo', attributes: ['matricula', 'marca', 'modelo'] }
+      ]
+    });
+    res.status(200).json(reservas);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };

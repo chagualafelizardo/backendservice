@@ -39,6 +39,10 @@ const Reserva = sequelize.define('reserva', {
     type: DataTypes.ENUM('Yes', 'No'),
     defaultValue: 'No',
   },
+  isPaid: {
+    type: DataTypes.ENUM('Paid', 'Not Paid'), // ✅ Novo campo
+    defaultValue: 'Not Paid', // ✅ Valor padrão
+  },
 }, {
   timestamps: true,
 });

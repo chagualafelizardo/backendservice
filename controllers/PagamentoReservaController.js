@@ -5,29 +5,45 @@ import fetch from 'node-fetch'; // certifique-se de que esse import está no top
 
 // Criar um novo pagamento de reserva
 export const createPagamentoReserva = async (req, res) => {
-  const { valorTotal, userId, reservaId,obs } = req.body;
+  console.log('=== REQUISIÇÃO RECEBIDA ===');
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+
+  const { valorTotal, data, userId, reservaId, obs } = req.body;
+  console.log('Valores extraídos:');
+  console.log('valorTotal:', valorTotal);
+  console.log('data:', data);
+  console.log('userId:', userId);
+  console.log('reservaId:', reservaId);
+  console.log('obs:', obs);
 
   try {
-    // Verificar se o usuário e a reserva existem
+    console.log('Verificando usuário e reserva...');
     const user = await User.findByPk(userId);
     const reserva = await Reserva.findByPk(reservaId);
 
     if (!user || !reserva) {
+      console.log('Usuário ou reserva não encontrados');
       return res.status(404).json({ message: 'Usuário ou reserva não encontrados.' });
     }
 
-    // Criar o pagamento
+    console.log('Criando pagamento...');
     const pagamentoReserva = await PagamentoReserva.create({
       valorTotal,
+      data,
       userId,
       reservaId,
       obs,
     });
 
+    console.log('Pagamento criado:', pagamentoReserva);
     res.status(201).json(pagamentoReserva);
   } catch (error) {
-    console.error('Erro ao criar pagamento de reserva:', error);
-    res.status(500).json({ message: 'Erro ao criar pagamento de reserva.' });
+    console.error('Erro ao criar pagamento:', error);
+    res.status(500).json({ 
+      message: 'Erro ao criar pagamento de reserva.',
+      error: error.message 
+    });
   }
 };
 
@@ -94,6 +110,7 @@ export const updatePagamentoReserva = async (req, res) => {
     // Atualizar o pagamento
     await pagamentoReserva.update({
       valorTotal,
+      data,
       userId,
       reservaId,
       obs,

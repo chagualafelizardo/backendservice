@@ -211,3 +211,36 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Função para buscar os roles de um usuário específico
+export const getUserRoles = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    const user = await User.findByPk(userId, {
+      include: [{
+        model: Role,
+        through: { attributes: [] }, // Não retorna atributos da tabela intermediária
+        attributes: ['id', 'name', 'createdAt', 'updatedAt'] // Especifica os campos que queremos
+      }]
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Formata os roles para garantir que todos os campos necessários estejam presentes
+    const formattedRoles = user.Roles.map(role => ({
+      id: role.id,
+      name: role.name || '', // Garante que name não será null
+      selected: false, // Adiciona o campo selected
+      createdAt: role.createdAt.toISOString(),
+      updatedAt: role.updatedAt.toISOString()
+    }));
+
+    res.json(formattedRoles);
+  } catch (error) {
+    console.error('Error fetching user roles:', error);
+    res.status(500).json({ error: 'Failed to fetch user roles' });
+  }
+};

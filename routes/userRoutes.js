@@ -7,6 +7,7 @@ import {
     deleteUser,
     loginUser,
     getUserByFullName,
+    getUserRoles
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -18,6 +19,6 @@ router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 router.post('/login', loginUser);
 router.get('/user/:fullName', getUserByFullName);
-
+router.get('/:userId/roles', getUserRoles);
 
 export default router;
