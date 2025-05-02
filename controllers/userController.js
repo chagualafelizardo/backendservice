@@ -216,12 +216,12 @@ export const loginUser = async (req, res) => {
 export const getUserRoles = async (req, res) => {
   try {
     const userId = req.params.userId;
-    
+
     const user = await User.findByPk(userId, {
       include: [{
         model: Role,
-        through: { attributes: [] }, // Não retorna atributos da tabela intermediária
-        attributes: ['id', 'name', 'createdAt', 'updatedAt'] // Especifica os campos que queremos
+        through: { attributes: [] },
+        attributes: ['id', 'name', 'createdAt', 'updatedAt']
       }]
     });
 
@@ -229,13 +229,15 @@ export const getUserRoles = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Formata os roles para garantir que todos os campos necessários estejam presentes
+    // DEBUG: Veja se os roles vieram mesmo
+    console.log('[DEBUG] user.Roles:', user.Roles);
+
     const formattedRoles = user.Roles.map(role => ({
       id: role.id,
-      name: role.name || '', // Garante que name não será null
-      selected: false, // Adiciona o campo selected
-      createdAt: role.createdAt.toISOString(),
-      updatedAt: role.updatedAt.toISOString()
+      name: role.name || '',
+      selected: false,
+      createdAt: role.createdAt?.toISOString(),
+      updatedAt: role.updatedAt?.toISOString()
     }));
 
     res.json(formattedRoles);

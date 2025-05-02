@@ -82,3 +82,19 @@ export const deleteAtendimentoDocument = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete atendimento document' });
   }
 };
+
+// Buscar todos os documentos de um atendimento específico
+export const getDocumentsByAtendimento = async (req, res) => {
+  try {
+      const { atendimentoId } = req.params;
+      
+      const documents = await AtendimentoDocument.findAll({
+          where: { atendimentoID: atendimentoId }
+      });
+
+      res.json(documents);
+  } catch (error) {
+      console.error('Erro ao buscar documentos do atendimento:', error);
+      res.status(500).json({ error: 'Erro ao buscar documentos do atendimento' });
+  }
+};

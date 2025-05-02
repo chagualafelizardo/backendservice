@@ -4,7 +4,8 @@ import {
   createAtendimentoItem,
   getAtendimentoItemById,
   updateAtendimentoItem,
-  deleteAtendimentoItem
+  deleteAtendimentoItem,
+  getItemsByAtendimento
 } from '../controllers/AtendimentoItemController.js';
 
 const router = express.Router();
@@ -14,5 +15,5 @@ router.get('/', getAllAtendimentoItems);           // Rota para buscar todos os 
 router.get('/:id', getAtendimentoItemById);        // Rota para buscar item de atendimento por ID
 router.put('/:id', updateAtendimentoItem);         // Rota para atualizar um item de atendimento por ID
 router.delete('/:id', deleteAtendimentoItem);      // Rota para deletar um item de atendimento por ID
-
+router.get('/:atendimentoId/items', getItemsByAtendimento);
 export default router;

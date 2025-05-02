@@ -209,8 +209,26 @@ Veiculo.hasMany(VehicleHistoryRent, { foreignKey: 'veiculoID' });
 VehicleHistoryRent.belongsTo(Veiculo, { foreignKey: 'veiculoID' });
 
 // No modelo Allocation
-Allocation.hasMany(UserAtendimentoAllocation, {foreignKey: 'allocationId',as: 'userAtendimentoAllocations'});
+Allocation.hasMany(UserAtendimentoAllocation, {foreignKey: 'allocationId', as: 'userAtendimentoAllocations'});
 
+// No modelo Allocation.js
+Allocation.hasMany(UserAtendimentoAllocation, {foreignKey: 'allocationId', as: 'userAtendimentoAllocation'});
+
+// No modelo UserAtendimentoAllocation.js
+UserAtendimentoAllocation.belongsTo(Allocation, { as: 'Allocation' }) ;
+
+// No modelo Atendimento.js
+Atendimento.belongsTo(Reserva, { as: 'Reserva' });
+
+// No modelo Reserva.js
+Reserva.belongsTo(Veiculo, { as: 'Veiculo' });
+
+// No modelo Allocation.js
+
+// No modelo UserAtendimentoAllocation.js
+UserAtendimentoAllocation.belongsTo(User, {foreignKey: 'userId', as: 'Users'});
+UserAtendimentoAllocation.belongsTo(Atendimento, {foreignKey: 'atendimentoId', as: 'Atendimentos'});
+UserAtendimentoAllocation.belongsTo(Allocation, {foreignKey: 'allocationId', as: 'Allocations'});
 
 // No modelo UserAtendimentoAllocation
 UserAtendimentoAllocation.belongsTo(User, { as: 'User' });

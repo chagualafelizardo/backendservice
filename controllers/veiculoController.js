@@ -386,3 +386,33 @@ export const findAllByState = async (req, res) => {
     res.status(500).send("Erro ao buscar veículos por estado");
   }
 };
+
+// Função para atualizar o campo state de um veículo por ID
+export const updateStateById = async (req, res) => {
+  try {
+    const { id } = req.params; // ID do veículo recebido via parâmetro
+    const { state } = req.body; // Novo valor do campo state recebido no corpo da requisição
+
+    // Encontra o veículo pelo ID
+    const veiculo = await Veiculo.findByPk(id);
+
+    if (veiculo) {
+      // Atualiza o campo state
+      await veiculo.update({ state });
+
+      res.json({
+        message: 'Vehicle state updated successfully',
+        veiculo: {
+          id: veiculo.id,
+          state: veiculo.state,
+        },
+      });
+    } else {
+      res.status(404).json({ error: 'Vehicle not found' });
+    }
+  } catch (error) {
+    console.error('Erro ao atualizar state:', error);
+    res.status(500).json({ error: 'Failed to update vehicle state' });
+  }
+};
+

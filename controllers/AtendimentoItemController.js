@@ -104,3 +104,19 @@ export const deleteAtendimentoItem = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete atendimento item' });
   }
 };
+
+// Buscar todos os itens de um atendimento específico
+export const getItemsByAtendimento = async (req, res) => {
+  try {
+      const { atendimentoId } = req.params;
+      
+      const items = await AtendimentoItem.findAll({
+          where: { atendimentoID: atendimentoId }
+      });
+
+      res.json(items);
+  } catch (error) {
+      console.error('Erro ao buscar itens do atendimento:', error);
+      res.status(500).json({ error: 'Erro ao buscar itens do atendimento' });
+  }
+};

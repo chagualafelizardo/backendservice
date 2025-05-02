@@ -2,6 +2,8 @@ import UserAtendimentoAllocation from '../models/UserAtendimentoAllocation.js';
 import User from '../models/User.js';
 import Atendimento from '../models/Atendimento.js';
 import Allocation from '../models/Allocation.js';
+import Reserva from '../models/Reserva.js';
+import Veiculo from '../models/Veiculo.js';
 
 // Criar uma nova associação
 export const createUserAtendimentoAllocation = async (req, res) => {
@@ -25,6 +27,8 @@ export const createUserAtendimentoAllocation = async (req, res) => {
     });
   }
 };
+
+
 
 // Listar todas as associações
 export const getAllUserAtendimentoAllocations = async (req, res) => {
@@ -113,37 +117,6 @@ export const deleteUserAtendimentoAllocation = async (req, res) => {
   }
 };
 
-// export const getUsersByAtendimentoId = async (req, res) => {
-//   try {
-//     const { atendimentoId } = req.params;
-
-//     const allocations = await UserAtendimentoAllocation.findAll({
-//       where: { atendimentoId },
-//       include: [
-//         {
-//           model: User,
-//           attributes: ['id', 'firstName', 'lastName', 'email', 'phone1', 'phone2'],
-//         },
-//         {
-//           model: Atendimento,
-//           attributes: ['id', 'description', 'date'],
-//         },
-//       ],
-//     });
-
-//     if (allocations.length === 0) {
-//       return res.status(404).json({ message: 'No users found for the given atendimentoId.' });
-//     }
-
-//     res.status(200).json({ data: allocations });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Error fetching users for the given atendimentoId.',
-//       error: error.message,
-//     });
-//   }
-// };
-
 export const getUsersByAtendimentoId = async (req, res) => {
   try {
     const { atendimentoId } = req.params;
@@ -203,6 +176,64 @@ export const getUserIdByAtendimentoId = async (req, res) => {
     res.status(500).json({
       message: 'Error fetching users for the given atendimentoId.',
       error: error.message,
+    });
+  }
+};
+
+export const getUserDetailsByAtendimentoId = async (req, res) => {
+  try {
+    const { atendimentoId } = req.params;
+
+    // 1. Primeiro busque apenas os IDs dos usuários
+    const allocations = await UserAtendimentoAllocation.findAll({
+      where: { atendimentoId },
+      attributes: ['userId'], // Garante que usamos o nome correto da coluna
+      raw: true // Retorna objetos simples
+    });
+
+    if (allocations.length === 0) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Nenhum motorista encontrado para este atendimento.' 
+      });
+    }
+
+    // 2. Extrai os IDs dos usuários
+    const userIds = allocations.map(a => a.userId);
+
+    // 3. Busca os detalhes completos dos usuários
+    const users = await User.findAll({
+      where: {
+        id: userIds
+      },
+      attributes: ['id', 'firstName', 'lastName', 'email', 'phone1', 'phone2', 'img']
+    });
+
+    // 4. Formata a resposta
+    const formattedUsers = users.map(user => ({
+      id: user.id,
+      nome: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      telefone: user.phone1,
+      telefoneAlternativo: user.phone2,
+      imagem: user.img ? user.img.toString('base64') : null
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: formattedUsers
+    });
+
+  } catch (error) {
+    console.error('Erro detalhado:', {
+      message: error.message,
+      sql: error.sql,
+      stack: error.stack
+    });
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao buscar informações do motorista',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

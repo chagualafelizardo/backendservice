@@ -13,7 +13,8 @@ import {
   getVeiculoByMatriculaM,
   findVeiculosEmManutencao,
   getVeiculoWithDetails,
-  findAllByState
+  findAllByState,
+  updateStateById,
 } from '../controllers/veiculoController.js';
 
 const router = express.Router();
@@ -32,5 +33,6 @@ router.get('/matricula/:matricula', getVeiculoByMatriculaM);
 router.get('/manutencao', findVeiculosEmManutencao);
 router.get('/:id/details', getVeiculoWithDetails);
 router.get('/state/:state', findAllByState);
+router.put('/state/:id', updateStateById);
 
 export default router;

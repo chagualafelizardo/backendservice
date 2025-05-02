@@ -257,3 +257,66 @@ export const getUnpaidReservas = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Obter veículo completo por ID da reserva
+export const getVeiculoByReservaId = async (req, res) => {
+  const { reservaId } = req.params;
+
+  try {
+    const reserva = await Reserva.findByPk(reservaId, {
+      include: [{
+        model: Veiculo,
+        as: 'veiculo',
+        attributes: { exclude: ['createdAt', 'updatedAt'] } // Exclui campos desnecessários
+      }]
+    });
+
+    if (!reserva) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Reserva não encontrada' 
+      });
+    }
+
+    if (!reserva.veiculo) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Veículo não encontrado para esta reserva' 
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      veiculo: reserva.veiculo
+    });
+
+  } catch (error) {
+    console.error('Erro ao buscar veículo por reserva:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Erro interno no servidor',
+      error: error.message 
+    });
+  }
+};
+
+// Novo endpoint para obter veiculoID por reservaID
+export const getVeiculoIdByReservaId = async (req, res) => {
+  const { reservaId } = req.params;
+  
+  try {
+    const reserva = await Reserva.findByPk(reservaId);
+    
+    if (!reserva) {
+      return res.status(404).json({ message: 'Reserva não encontrada' });
+    }
+
+    // Retorna apenas o veiculoID
+    res.status(200).json({ 
+      veiculoID: reserva.veiculoID 
+    });
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

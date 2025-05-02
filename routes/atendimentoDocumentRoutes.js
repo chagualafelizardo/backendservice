@@ -4,7 +4,8 @@ import {
   createAtendimentoDocument,
   getAtendimentoDocumentById,
   updateAtendimentoDocument,
-  deleteAtendimentoDocument
+  deleteAtendimentoDocument,
+  getDocumentsByAtendimento
 } from '../controllers/AtendimentoDocumentController.js';
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get('/', getAllAtendimentoDocuments);           // Rota para buscar todos
 router.get('/:id', getAtendimentoDocumentById);        // Rota para buscar documento de atendimento por ID
 router.put('/:id', updateAtendimentoDocument);         // Rota para atualizar um documento de atendimento por ID
 router.delete('/:id', deleteAtendimentoDocument);      // Rota para deletar um documento de atendimento por ID
+router.get('/:atendimentoId/documents', getDocumentsByAtendimento);
 
 export default router;

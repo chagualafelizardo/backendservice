@@ -11,6 +11,8 @@ import {
   updateReservaIsPaid,
   getPaidReservas,
   getUnpaidReservas,
+  getVeiculoByReservaId,
+  getVeiculoIdByReservaId,
 } from '../controllers/reservaController.js';
 
 const router = express.Router();
@@ -26,5 +28,7 @@ router.put('/:id/inservice', updateReservaInService);
 router.put('/:id/isPaid', updateReservaIsPaid);
 router.get('/reservas/paid', getPaidReservas);
 router.get('/reservas/notpaid', getUnpaidReservas);
+router.get('/:reservaId/veiculo', getVeiculoByReservaId);
+router.get('/:reservaId/veiculoId', getVeiculoIdByReservaId);
 
 export default router;
