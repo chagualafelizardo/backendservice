@@ -17,6 +17,7 @@ const UserAtendimentoAllocation = sequelize.define('useratendimentoallocation', 
       key: 'id',
     },
     allowNull: false,
+    field: 'userId', // Esta linha é crucial
     onDelete: 'CASCADE', // Exclui o registro se o usuário for excluído
   },
   atendimentoId: {

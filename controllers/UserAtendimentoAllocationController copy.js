@@ -28,6 +28,8 @@ export const createUserAtendimentoAllocation = async (req, res) => {
   }
 };
 
+
+
 // Listar todas as associações
 export const getAllUserAtendimentoAllocations = async (req, res) => {
   try {
@@ -110,31 +112,6 @@ export const deleteUserAtendimentoAllocation = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'Error deleting association.',
-      error: error.message,
-    });
-  }
-};
-
-// Novo método no controller
-export const deleteUserAtendimentoAllocationByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    // Encontrar e deletar todas as associações com este userId
-    const result = await UserAtendimentoAllocation.destroy({
-      where: { userId }
-    });
-
-    if (result === 0) {
-      return res.status(404).json({ message: 'No associations found for this user.' });
-    }
-
-    res.status(200).json({
-      message: `Deleted ${result} association(s) successfully.`,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'Error deleting associations by user ID.',
       error: error.message,
     });
   }
