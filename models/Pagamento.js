@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import db from "../config/database.js";
-import Atendimento from '../models/Atendimento.js'; // Importe o modelo Atendimento
-import User from '../models/User.js'; // Importe o modelo User
-import PaymentCriteria from '../models/PaymentCriteria.js'; // Importe o modelo PaymentCriteria
+import Atendimento from '../models/Atendimento.js';
+import User from '../models/User.js';
+import PaymentCriteria from '../models/PaymentCriteria.js';
 
 const Pagamento = db.define("pagamentos", {
   id: {
@@ -11,43 +11,58 @@ const Pagamento = db.define("pagamentos", {
     autoIncrement: true,
   },
   valorTotal: {
-    type: DataTypes.DECIMAL(10, 2), // Valor total com 2 casas decimais
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
   data: {
-    type: DataTypes.DATE, // Campo para armazenar a data do pagamento
+    type: DataTypes.DATE,
     allowNull: false,
   },
-  // Chave estrangeira para Atendimento
+  status: {
+    type: DataTypes.ENUM('pending', 'confirmed', 'rejected'),
+    defaultValue: 'pending',
+    allowNull: false,
+  },
   atendimentoId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'atendimentos', // Nome da tabela associada
+      model: 'atendimentos',
       key: 'id',
     },
     allowNull: false,
-    onDelete: 'CASCADE', // Exclui o pagamento se o atendimento for excluído
+    onDelete: 'CASCADE',
   },
-  // Chave estrangeira para User (Motorista)
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'users', // Nome da tabela associada
+      model: 'users',
       key: 'id',
     },
     allowNull: false,
-    onDelete: 'CASCADE', // Exclui o pagamento se o usuário for excluído
+    onDelete: 'CASCADE',
   },
-  // Chave estrangeira para PaymentCriteria
   criterioPagamentoId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'paymentCriteria', // Nome da tabela associada
+      model: 'paymentCriteria',
       key: 'id',
     },
     allowNull: false,
-    onDelete: 'CASCADE', // Exclui o pagamento se o critério de pagamento for excluído
+    onDelete: 'CASCADE',
   },
+}, {
+  // Adicionando índices para melhor performance nas consultas por status
+  indexes: [
+    {
+      fields: ['status']
+    },
+    {
+      fields: ['atendimentoId']
+    },
+    {
+      fields: ['userId']
+    }
+  ]
 });
 
 export default Pagamento;

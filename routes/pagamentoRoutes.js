@@ -5,6 +5,7 @@ import {
   getPagamentoById,
   updatePagamento,
   deletePagamento,
+  updatePagamentoStatus,
 } from '../controllers/pagamentoController.js';
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get('/', getAllPagamentos);
 router.get('/:id', getPagamentoById);
 router.put('/:id', updatePagamento);
 router.delete('/:id', deletePagamento);
+router.patch('/status/:id', updatePagamentoStatus);
 
 export default router;
