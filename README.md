@@ -36,3 +36,12 @@ https://www.youtube.com/watch?v=LAUi8pPlcUM&list=PLC3y8-rFHvwh8shCMHFA5kWxD9PaPw
 https://www.youtube.com/watch?v=pP4kjXykbio
 https://www.youtube.com/watch?v=JZXQ455OT3A&list=PL0Zuz27SZ-6PFkIxaJ6Xx_X46avTM1aYw
 >>>>>>> 3324002 (Initial commit)
+
+git add .
+git commit -m "Initial commit"
+git push -u origin main
+
+
+git add .
+git commit -m "Remove sensitive data from history"
+git push origin main --force
