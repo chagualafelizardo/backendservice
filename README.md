@@ -37,6 +37,9 @@ https://www.youtube.com/watch?v=pP4kjXykbio
 https://www.youtube.com/watch?v=JZXQ455OT3A&list=PL0Zuz27SZ-6PFkIxaJ6Xx_X46avTM1aYw
 >>>>>>> 3324002 (Initial commit)
 
+<!-- Acesse o link fornecido no erro: -->
+https://github.com/chagualafelizardo/backendservice/security/secret-scanning/unblock-secret/2xHeoVexQNUGyJdCmsgzmk3suJp
+
 git add .
 git commit -m "Initial commit"
 git push -u origin main
