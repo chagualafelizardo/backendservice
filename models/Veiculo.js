@@ -53,13 +53,21 @@ const Veiculo = sequelize.define("veiculo", {
         type: DataTypes.ENUM('Free', 'Occupied'),
         defaultValue: 'Free',
     },
-    rentalIncludesDriver: {  // Campo para indicar se o aluguel inclui motorista
+    rentalIncludesDriver: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false, // Por padrão, será 'false', ou seja, não inclui motorista
+        defaultValue: false,
     },
-    isAvailable: {  // Novo campo para disponibilidade
+    isAvailable: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false, // Por padrão, disponível
+        defaultValue: false,
+    },
+    smsLockCommand: {
+        type: DataTypes.STRING(255),
+        allowNull: true, // Pode ser null se a imagem não for obrigatória
+    },
+    smsUnLockCommand: {
+        type: DataTypes.STRING(255),
+        allowNull: true, // Pode ser null se a imagem não for obrigatória
     },
 }, {
     timestamps: true,

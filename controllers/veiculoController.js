@@ -26,7 +26,10 @@ export const findAll = async (req, res) => {
 export const addVeiculo = async (req, res) => {
   try {
     const {
-      matricula, marca, modelo, ano, cor, image, num_chassi, num_lugares, num_motor, num_portas, tipo_combustivel, state, rentalIncludesDriver, isAvailable
+      matricula, marca, modelo, ano, cor, image, 
+      num_chassi, num_lugares, num_motor, num_portas, 
+      tipo_combustivel, state, rentalIncludesDriver, 
+      isAvailable, smsLockCommand, smsUnLockCommand
     } = req.body;
     
     // Converte a imagem para Buffer se necessário
@@ -46,7 +49,9 @@ export const addVeiculo = async (req, res) => {
       tipo_combustivel,
       state,
       rentalIncludesDriver,
-      isAvailable // Adiciona o novo campo
+      isAvailable,
+      smsLockCommand,
+      smsUnLockCommand
     });
     
     // Inclua a imagem como Base64 na resposta
@@ -143,7 +148,10 @@ export const updateVeiculo = async (req, res) => {
     const veiculo = await Veiculo.findByPk(req.params.id);
     if (veiculo) {
       const {
-        matricula, marca, modelo, ano, cor, image, num_chassi, num_lugares, num_motor, num_portas, tipo_combustivel, state, rentalIncludesDriver, isAvailable
+        matricula, marca, modelo, ano, cor, image, 
+        num_chassi, num_lugares, num_motor, num_portas, 
+        tipo_combustivel, state, rentalIncludesDriver, 
+        isAvailable, smsLockCommand,smsUnLockCommand
       } = req.body;
       
       // Converte a imagem para Buffer se necessário
@@ -163,7 +171,9 @@ export const updateVeiculo = async (req, res) => {
         tipo_combustivel,
         state,
         rentalIncludesDriver,
-        isAvailable // Atualiza o campo isAvailable
+        isAvailable,
+        smsLockCommand,
+        smsUnLockCommand
       });
       
       // Inclua a imagem como Base64 na resposta
@@ -305,7 +315,6 @@ export const updateIsAvailableByMatricula = async (req, res) => {
   }
 };
 
-// Função para buscar todos os veículos que estão na tabela de manutenção
 // Função para buscar todos os veículos que estão na tabela de manutenção
 export const findVeiculosEmManutencao = async (req, res) => {
   try {
