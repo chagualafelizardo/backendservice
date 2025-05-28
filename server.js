@@ -31,8 +31,10 @@ import detalhesmanutencao from './models/DetalhesManutencao.js';
 import Pagamento from './models/Pagamento.js';
 import DetalhePagamento from './models/DetalhePagamento.js';
 import VeiculoDetails from './models/VeiculoDetails.js';
-import PagamentoReserva from './models/PagamentoReserva.js'
-import VehicleHistoryRent from './models/VehicleHistoryRent.js'
+import PagamentoReserva from './models/PagamentoReserva.js';
+import VehicleHistoryRent from './models/VehicleHistoryRent.js';
+import Multa from './models/Multa.js';
+
 
 // Importar rotas
 import roleRoutes from './routes/roleRoutes.js';
@@ -61,6 +63,8 @@ import DetalhePagamentoRoutes from './routes/DetalhePagamentoRoutes.js';
 import VeiculoDetailsRoutes from './routes/VeiculoDetailsRoutes.js';
 import PagamentoReservaRoutes from './routes/PagamentoReservaRoutes.js'
 import VehicleHistoryRentRoutes from './routes/VehicleHistoryRentRoutes.js';
+import TipoMultaRoutes from './routes/TipoMultaRoutes.js';
+import MultaRoutes from './routes/MultaRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -111,8 +115,10 @@ app.use('/detalhesmanutencao', detalhesmanutencaoRoutes);
 app.use('/pagamento', pagamentoRoutes);
 app.use('/detalhespagamento', DetalhePagamentoRoutes);
 app.use('/veiculodetails', VeiculoDetailsRoutes);
-app.use('/pagamentoreserva', PagamentoReservaRoutes)
-app.use('/vehiclehistoryrent', VehicleHistoryRentRoutes)
+app.use('/pagamentoreserva', PagamentoReservaRoutes);
+app.use('/vehiclehistoryrent', VehicleHistoryRentRoutes);
+app.use('/tipomulta', TipoMultaRoutes);
+app.use('/multa', MultaRoutes);
 
 
 // Acesso a outras APi externas
