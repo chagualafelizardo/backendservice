@@ -1,4 +1,5 @@
 import Role from '../models/Role.js';
+import { Op } from 'sequelize';
 
 // Função para criar um novo papel
 export const createRole = async (req, res) => {

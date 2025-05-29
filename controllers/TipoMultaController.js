@@ -1,4 +1,5 @@
 import TipoMulta from '../models/TipoMultas.js';
+import { Op } from 'sequelize';
 
 export const getAllTiposMulta = async (req, res) => {
   try {

@@ -1,9 +1,12 @@
 import Multa from '../models/Multa.js';
+import Atendimento from '../models/Atendimento.js';
 import { Op } from 'sequelize';
 
 export const getAllMultas = async (req, res) => {
   try {
-    const multas = await Multa.findAll();
+    const multas = await Multa.findAll({
+      include: [{ model: Atendimento, as: 'atendimento' }]
+    });
     res.status(200).json({
       success: true,
       data: multas
@@ -19,12 +22,22 @@ export const getAllMultas = async (req, res) => {
 
 export const createMulta = async (req, res) => {
   try {
-    const { description, valorpagar, observation } = req.body;
+    const { description, valorpagar, observation, atendimentoId } = req.body;
+
+    // Verifica se o atendimento existe
+    const atendimento = await Atendimento.findByPk(atendimentoId);
+    if (!atendimento) {
+      return res.status(404).json({
+        success: false,
+        message: 'Atendimento não encontrado'
+      });
+    }
 
     const newMulta = await Multa.create({
       description,
       valorpagar,
-      observation: observation || null
+      observation: observation || null,
+      atendimentoId
     });
 
     res.status(201).json({
@@ -48,10 +61,35 @@ export const createMulta = async (req, res) => {
   }
 };
 
+// Buscar multas por atendimentoId (parâmetro de rota)
+export const fetchMultasByAtendimentoId = async (req, res) => {
+  const { atendimentoId } = req.params;
+  try {
+    const multas = await Multa.findAll({
+      where: { atendimentoId },
+      include: [{ model: Atendimento, as: 'atendimento' }]
+    });
+
+    res.status(200).json({
+      success: true,
+      data: multas
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao buscar multas pelo atendimentoId',
+      error: error.message
+    });
+  }
+};
+
+
 export const getMultaById = async (req, res) => {
   try {
-    const multa = await Multa.findByPk(req.params.id);
-    
+    const multa = await Multa.findByPk(req.params.id, {
+      include: [{ model: Atendimento, as: 'atendimento' }]
+    });
+
     if (!multa) {
       return res.status(404).json({
         success: false,
@@ -75,7 +113,6 @@ export const getMultaById = async (req, res) => {
 export const updateMulta = async (req, res) => {
   try {
     const multa = await Multa.findByPk(req.params.id);
-    
     if (!multa) {
       return res.status(404).json({
         success: false,
@@ -83,12 +120,24 @@ export const updateMulta = async (req, res) => {
       });
     }
 
-    const { description, valorpagar, observation } = req.body;
+    const { description, valorpagar, observation, atendimentoId } = req.body;
+
+    // Se o atendimentoId for informado, verificar se ele existe
+    if (atendimentoId) {
+      const atendimento = await Atendimento.findByPk(atendimentoId);
+      if (!atendimento) {
+        return res.status(404).json({
+          success: false,
+          message: 'Atendimento fornecido não encontrado'
+        });
+      }
+    }
 
     await multa.update({
       description: description || multa.description,
       valorpagar: valorpagar || multa.valorpagar,
-      observation: observation !== undefined ? observation : multa.observation
+      observation: observation !== undefined ? observation : multa.observation,
+      atendimentoId: atendimentoId || multa.atendimentoId
     });
 
     res.status(200).json({
@@ -115,7 +164,6 @@ export const updateMulta = async (req, res) => {
 export const deleteMulta = async (req, res) => {
   try {
     const multa = await Multa.findByPk(req.params.id);
-    
     if (!multa) {
       return res.status(404).json({
         success: false,
@@ -124,7 +172,7 @@ export const deleteMulta = async (req, res) => {
     }
 
     await multa.destroy();
-    
+
     res.status(200).json({
       success: true,
       message: 'Multa removida com sucesso'

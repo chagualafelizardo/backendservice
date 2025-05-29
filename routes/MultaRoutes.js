@@ -4,7 +4,8 @@ import {
   createMulta,
   getMultaById,
   updateMulta,
-  deleteMulta
+  deleteMulta,
+  fetchMultasByAtendimentoId,
 } from '../controllers/multaController.js';
 
 const router = express.Router();
@@ -18,5 +19,7 @@ router.route('/:id')
   .get(getMultaById)    // GET /api/multas/:id
   .put(updateMulta)     // PUT /api/multas/:id
   .delete(deleteMulta); // DELETE /api/multas/:id
+
+router.get('/atendimento/:atendimentoId', fetchMultasByAtendimentoId);
 
 export default router;

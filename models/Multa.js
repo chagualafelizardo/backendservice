@@ -42,12 +42,21 @@ const Multa = sequelize.define('multa', {
         msg: 'A observação não pode exceder 1000 caracteres'
       }
     }
+  },
+  atendimentoId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'atendimentoId', // força o nome da coluna no banco como 'atendimentoId'
+    references: {
+      model: 'atendimentos', // nome da tabela relacionada
+      key: 'id'
+    }
   }
 }, {
   timestamps: true,
-  paranoid: true, // Para soft delete (opcional)
-  underscored: true, // Para usar snake_case no banco
-  tableName: 'multas' // Nome da tabela no banco
+  paranoid: true,
+  underscored: true,
+  tableName: 'multas'
 });
 
 export default Multa;

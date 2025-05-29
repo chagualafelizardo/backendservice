@@ -34,7 +34,7 @@ import VeiculoDetails from './models/VeiculoDetails.js';
 import PagamentoReserva from './models/PagamentoReserva.js';
 import VehicleHistoryRent from './models/VehicleHistoryRent.js';
 import Multa from './models/Multa.js';
-
+import ExtendServiceDay from './models/ExtendServiceDay.js'
 
 // Importar rotas
 import roleRoutes from './routes/roleRoutes.js';
@@ -65,6 +65,7 @@ import PagamentoReservaRoutes from './routes/PagamentoReservaRoutes.js'
 import VehicleHistoryRentRoutes from './routes/VehicleHistoryRentRoutes.js';
 import TipoMultaRoutes from './routes/TipoMultaRoutes.js';
 import MultaRoutes from './routes/MultaRoutes.js';
+import ExtendServiceDayRoutes from './routes/extendServiceDayRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -119,6 +120,7 @@ app.use('/pagamentoreserva', PagamentoReservaRoutes);
 app.use('/vehiclehistoryrent', VehicleHistoryRentRoutes);
 app.use('/tipomulta', TipoMultaRoutes);
 app.use('/multa', MultaRoutes);
+app.use('/extendserviceday', ExtendServiceDayRoutes);
 
 
 // Acesso a outras APi externas
@@ -222,8 +224,16 @@ Allocation.hasMany(UserAtendimentoAllocation, {foreignKey: 'allocationId',as: 'u
 UserAtendimentoAllocation.belongsTo(User, { as: 'User' });
 UserAtendimentoAllocation.belongsTo(Atendimento, { as: 'Atendimento' });
 
-app.use(express.static(path.join(__dirname, 'pages')));
+// Relacionamento atendimento e ExtendServiceDay
+ExtendServiceDay.belongsTo(Atendimento, {foreignKey: 'atendimentoId', as: 'atendimento',});
+Atendimento.hasMany(ExtendServiceDay, {foreignKey: 'atendimentoId', as: 'extendedServiceDays',});
 
+// Relacionamento entre o atendimento e a multa
+Multa.belongsTo(Atendimento, {foreignKey: 'atendimentoId', as: 'atendimento'});
+Atendimento.hasMany(Multa, {foreignKey: 'atendimentoId', as: 'multas'});
+
+
+app.use(express.static(path.join(__dirname, 'pages')));
 app.get("/", function(req, res){
   res.sendFile(path.join(__dirname, 'pages', 'index.html'));
 });
