@@ -43,12 +43,21 @@ const Multa = sequelize.define('multa', {
       }
     }
   },
+  dataMulta: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    validate: {
+      isDate: {
+        msg: 'A data da multa deve ser uma data válida'
+      }
+    }
+  },
   atendimentoId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'atendimentoId', // força o nome da coluna no banco como 'atendimentoId'
+    field: 'atendimentoId',
     references: {
-      model: 'atendimentos', // nome da tabela relacionada
+      model: 'atendimentos',
       key: 'id'
     }
   }
