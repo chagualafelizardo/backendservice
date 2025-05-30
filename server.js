@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import winston from 'winston'; // para logs
 
 // Importar modelos
 import User from './models/User.js';
@@ -88,10 +89,35 @@ app.use((req, res, next) => {
 });
 
 app.options('*', cors());
-
 app.use(express.json());
-
 app.use(bodyParser.json());
+
+/**/
+// Middleware de logging para todas as requisições
+app.use((req, res, next) => {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} - ${res.statusCode} ${duration}ms`);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    console.log('Params:', req.params);
+    console.log('Query:', req.query);
+  });
+
+  next();
+});
+
+// Middleware para log de erros
+app.use((err, req, res, next) => {
+  console.error(`[ERROR] ${new Date().toISOString()}`);
+  console.error('Path:', req.path);
+  console.error('Error:', err.stack || err.message);
+  next(err);
+});
+
+
 app.use('/role', roleRoutes);
 app.use('/user', userRoutes);
 app.use('/userrole', userRoleRoutes);

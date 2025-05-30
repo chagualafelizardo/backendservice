@@ -48,3 +48,25 @@ git push -u origin main
 git add .
 git commit -m "Remove sensitive data from history"
 git push origin main --force
+
+Para logs mais organizados, instale o pacote winston (um logger avançado):
+npm install winston
+
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' })
+  ]
+});
+
+// Substitua os console.log por:
+logger.info('Mensagem informativa');
+logger.error('Mensagem de erro');
