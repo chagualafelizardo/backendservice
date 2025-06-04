@@ -92,7 +92,7 @@ app.options('*', cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-/**/
+/****************************************************************************/
 // Middleware de logging para todas as requisições
 app.use((req, res, next) => {
   const start = Date.now();
@@ -116,6 +116,7 @@ app.use((err, req, res, next) => {
   console.error('Error:', err.stack || err.message);
   next(err);
 });
+/****************************************************************************/
 
 
 app.use('/role', roleRoutes);

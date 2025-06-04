@@ -70,3 +70,7 @@ const logger = winston.createLogger({
 // Substitua os console.log por:
 logger.info('Mensagem informativa');
 logger.error('Mensagem de erro');
+
+# Parar o uso de um porta para reusar
+netstat -aon | findstr :5000
+taskkill /PID 3540 /F
